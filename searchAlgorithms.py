@@ -2,7 +2,11 @@ import random
 import math
 import time
 from datetime import timedelta
+import networkx as nx
+from matplotlib import pyplot as plt
+import sys
 
+sys.setrecursionlimit(10000)
 
 def createGraph (v, k):
     listVertices = []
@@ -46,7 +50,7 @@ def DFS(graph, initialVertex, endVertex, pastVertices):
     edges = getEdges(graph,initialVertex)
     pastVertices.append(initialVertex)
     if(endVertex == initialVertex): 
-        printResult("Busca Profunda",pastVertices,initialVertex, endVertex)
+        printResult("Busca Profunda",pastVertices)
         return 1
     for edge in edges:
         if(edge[2] not in pastVertices):
@@ -57,11 +61,10 @@ def DFS(graph, initialVertex, endVertex, pastVertices):
 
 def BFS (graph, indexInitial, indexEnd):
     visited = [False] * (len(graph[0]))
-    vertexStart = graph[0][indexInitial]
     vertexEnd = graph[0][indexEnd]
     path = []
     queue = [] 
-    vertex = vertexStart
+    vertex = graph[0][indexInitial]
     queue.append(vertex)
     visited[indexInitial] = True
     while queue: 
@@ -71,7 +74,7 @@ def BFS (graph, indexInitial, indexEnd):
         for edge in edges:
             index = graph[0].index(edge[2])
             if(vertexEnd == vertex):
-                printResult("Busca por Largura",path,vertexStart, vertexEnd)
+                printResult("Busca por Largura",path)
                 return 1
             if visited[index] == False: 
                 queue.append(edge[2]) 
@@ -80,11 +83,10 @@ def BFS (graph, indexInitial, indexEnd):
 
 def BestFirst (graph, indexInitial, indexEnd):
     visited = [False] * (len(graph[0]))
-    vertexStart = graph[0][indexInitial]
     vertexEnd = graph[0][indexEnd]
     path = []
     queue = [] 
-    vertex = vertexStart
+    vertex = graph[0][indexInitial]
     queue.append((vertex,0))
     visited[indexInitial] = True
     while queue: 
@@ -95,7 +97,7 @@ def BestFirst (graph, indexInitial, indexEnd):
         for edge in edges:
             index = graph[0].index(edge[2])
             if(vertexEnd == vertex[0]):
-                printResult("Best First",path,vertexStart, vertexEnd)
+                printResult("Best First",path)
                 return 1
             if visited[index] == False: 
                 queue.append((edge[2],edge[0])) 
@@ -117,9 +119,8 @@ def findBestIndex(list, heuristic):
     #print(f"Melhor opção é: {list[bestOption]}")
     return bestOption
 
-def printResult(alg,path, start, end):
+def printResult(alg,path):
     print(f"Resultado da busca {alg}:")
-    print(f"Estado inicial: {start}    Estado final: {end}")
     print(f"Caminho percorrido: {path}")
     print(f"Tamanho do caminho percorrido: {len(path)}")
     return
@@ -150,7 +151,7 @@ def algAStart(graph, start, end):
         path.append(indiceAt)
 
         if(end == indiceAt):
-            printResult("A*",path, start, end)
+            printResult("A*",path)
             return 1
         
         edges = getEdges(graph, indiceAt)
@@ -166,15 +167,41 @@ def algAStart(graph, start, end):
 
     return 1
 
+def draw(graph):
+    G = nx.DiGraph()
 
-graph = createGraph(1000,5)
+    nodes = {}
+    for vertex in graph[0]:
+        nodes[vertex] = vertex
 
-pastVertices = []
+    edges = []
+    for edge in graph[1]:
+        edges.append((edge[1],edge[2]))
+
+    G.add_edges_from(edges)
+
+    plt.figure(1,figsize=(20,20)) 
+    nx.draw(G, pos=nodes, node_color='lightgreen', with_labels=True, node_size=50, font_size=8)
+    plt.show()
+
+
+#Alterar aqui os valores de V e K
+v = 10000
+k = 10
+
+graph = createGraph(v,k)
 
 indexStart = 0
 indexEnd = 3
 vertexStart = graph[0][indexStart]
 vertexEnd = graph[0][indexEnd]
+print("=========================")
+print(f"Grafo com v:{v} e k:{k}")
+print(f"Indice inicial do vértice:{indexStart}, Indice final do vértice :{indexEnd}")
+print(f"Vértice Inicial:{vertexStart}, Vértice Final :{vertexEnd}")
+print("=========================")
+
+pastVertices = []
 
 #Busca por Profundidade
 start = time.time()
@@ -201,5 +228,5 @@ end = time.time()
 printTime(start,end, "Busca A*");
 
 
-
-
+#Função para desenho do gráfico, para executar, basta remover o comentário
+# draw(graph)
