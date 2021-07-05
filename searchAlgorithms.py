@@ -5,6 +5,7 @@ from datetime import timedelta
 import networkx as nx
 from matplotlib import pyplot as plt
 import sys
+from scipy.spatial.distance import cityblock
 
 sys.setrecursionlimit(10000)
 
@@ -45,6 +46,18 @@ def getEdges(graph, vertex):
         if(edge[1] == vertex ):
             edges.append(edge)
     return edges
+
+def printResult(alg,path):
+    print(f"Resultado da busca {alg}:")
+    print(f"Caminho percorrido: {path}")
+    print(f"Tamanho do caminho percorrido: {len(path)}")
+    return
+
+def printTime(start,end, alg):
+    time = end - start
+    formatedTime = "{:0>8}".format(str(timedelta(seconds=time)))
+    print(f"Tempo de execução do algoritmo {alg}: {formatedTime}")
+    print("=========================")
 
 def DFS(graph, initialVertex, endVertex, pastVertices):
     edges = getEdges(graph,initialVertex)
@@ -104,7 +117,7 @@ def BestFirst (graph, indexInitial, indexEnd):
                 visited[index] = True
     return 0
 
-def funcEuclidean(start, end):   #Função que retorna a distância euclidean dos parâmetros pedidos
+def funcEuclidean(start, end):   #Função que retorna a distância euclidiana dos parâmetros pedidos
     distEuclid = math.dist(start, end)
     return distEuclid
 
@@ -115,23 +128,9 @@ def findBestIndex(list, heuristic):
         if heuristic[list[i]] < lowerValue:
             lowerValue = heuristic[list[i]]
             bestOption = i
-
-    #print(f"Melhor opção é: {list[bestOption]}")
     return bestOption
 
-def printResult(alg,path):
-    print(f"Resultado da busca {alg}:")
-    print(f"Caminho percorrido: {path}")
-    print(f"Tamanho do caminho percorrido: {len(path)}")
-    return
-
-def printTime(start,end, alg):
-    time = end - start
-    formatedTime = "{:0>8}".format(str(timedelta(seconds=time)))
-    print(f"Tempo de execução do algoritmo {alg}: {formatedTime}")
-    print("=========================")
-
-def algAStart(graph, start, end):
+def AStar(graph, start, end):
     travelledDistance = {}
     euclidean = {}
     heuristic = {}   #h=travelledDistance+distancia_euclidean
@@ -145,7 +144,6 @@ def algAStart(graph, start, end):
     heuristic[start] = travelledDistance[start] + euclidean[start]
 
     while len(list)!=0:
-        #print(f"list = {list}")
         bestIndex = findBestIndex(list, heuristic)
         indiceAt = list.pop(bestIndex)
         path.append(indiceAt)
@@ -161,6 +159,45 @@ def algAStart(graph, start, end):
                 travelledDistance[edge[2]] = travelledDistance[indiceAt] + funcEuclidean(indiceAt, edge[2])
                 euclidean[edge[2]] = funcEuclidean(edge[2], end)
                 heuristic[edge[2]] = euclidean[edge[2]] + travelledDistance[edge[2]]
+                #print(f"analisando nó atual: {edge[2]} --> heuristic= {heuristic[edge[2]]}\n")
+    
+    print("path não encontrado!!")
+
+    return 1
+
+def Manhattan(inicio, fim):
+    distManhattan = cityblock(start, end)
+    return distManhattan
+
+def AManhattan(graph, start, end):
+    travelledDistance = {}
+    mink = {}
+    heuristic = {}   #h=travelledDistance+mink
+    list = []      #list com todos os vértices que foram encontrados
+    path = []    #list de paths já percorridos pelo programa
+
+    #inicializa as variáveis com valores corretos
+    list.append(start)
+    mink[start] = Manhattan(start, end)
+    travelledDistance[start] = 0
+    heuristic[start] = travelledDistance[start] + mink[start]
+
+    while len(list)!=0:
+        bestIndex = findBestIndex(list, heuristic)
+        indiceAt = list.pop(bestIndex)
+        path.append(indiceAt)
+
+        if(end == indiceAt):
+            printResult("A*",path)
+            return 1
+        
+        edges = getEdges(graph, indiceAt)
+        for edge in edges:
+            if edge[2] not in list and edge[2] not in path: #Para conferir que seja analisado somente 1 vez cada nó
+                list.append(edge[2])
+                travelledDistance[edge[2]] = travelledDistance[indiceAt] + funcEuclidean(indiceAt, edge[2])
+                mink[edge[2]] = funcEuclidean(edge[2], end)
+                heuristic[edge[2]] = mink[edge[2]] + travelledDistance[edge[2]]
                 #print(f"analisando nó atual: {edge[2]} --> heuristic= {heuristic[edge[2]]}\n")
     
     print("path não encontrado!!")
@@ -186,7 +223,7 @@ def draw(graph):
 
 
 #Alterar aqui os valores de V e K
-v = 10000
+v = 1000
 k = 10
 
 graph = createGraph(v,k)
@@ -223,10 +260,16 @@ printTime(start,end, "Busca Best First");
 
 #Busca A*
 start = time.time()
-search = algAStart(graph, vertexStart, vertexEnd)
+search = AStar(graph, vertexStart, vertexEnd)
 end = time.time()
 printTime(start,end, "Busca A*");
 
+#Busca A
+start = time.time()
+search = AManhattan(graph, vertexStart, vertexEnd)
+end = time.time()
+printTime(start,end, "Busca A");
+
 
 #Função para desenho do gráfico, para executar, basta remover o comentário
-# draw(graph)
+#draw(graph)
