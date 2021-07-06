@@ -239,8 +239,8 @@ vertexStart = graph[0][indexStart]
 vertexEnd = graph[0][indexEnd]
 print("=========================")
 print(f"Grafo com v:{v} e k:{k}")
-print(f"Indice inicial do vértice:{indexStart}, Indice final do vértice :{indexEnd}")
-print(f"Vértice Inicial:{vertexStart}, Vértice Final :{vertexEnd}")
+print(f"Indice inicial do vértice: {indexStart}, Indice final do vértice: {indexEnd}")
+print(f"Vértice Inicial: {vertexStart}, Vértice Final: {vertexEnd}")
 print("=========================")
 
 pastVertices = []
