@@ -1,3 +1,6 @@
+#Gabriela Vidal - 4277535
+#Ingrid Otani - 108189711
+
 import random
 import math
 import time
@@ -48,10 +51,10 @@ def getEdges(graph, vertex):
     return edges
 
 def printResult(alg,path):
-    print(f"Resultado da busca {alg}:")
+    print(f"Resultado da busca: {alg}")
     print(f"Caminho percorrido: {path}")
     print(f"Tamanho do caminho percorrido: {len(path)}")
-    return
+    return 0
 
 def printTime(start,end, alg):
     time = end - start
@@ -165,7 +168,7 @@ def AStar(graph, start, end):
 
     return 1
 
-def Manhattan(inicio, fim):
+def Manhattan(start, end):
     distManhattan = cityblock(start, end)
     return distManhattan
 
@@ -188,7 +191,7 @@ def AManhattan(graph, start, end):
         path.append(indiceAt)
 
         if(end == indiceAt):
-            printResult("A*",path)
+            printResult("A",path)
             return 1
         
         edges = getEdges(graph, indiceAt)
@@ -223,13 +226,15 @@ def draw(graph):
 
 
 #Alterar aqui os valores de V e K
-v = 1000
-k = 10
+v = 10
+k = 2
 
 graph = createGraph(v,k)
 
-indexStart = 0
-indexEnd = 3
+#Gera os indices de inicio e fim aleatoriamente
+indexStart = random.randint(0,v)
+indexEnd = random.randint(0,v)
+
 vertexStart = graph[0][indexStart]
 vertexEnd = graph[0][indexEnd]
 print("=========================")
@@ -272,4 +277,4 @@ printTime(start,end, "Busca A");
 
 
 #Função para desenho do gráfico, para executar, basta remover o comentário
-#draw(graph)
+draw(graph)

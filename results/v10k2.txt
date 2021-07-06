@@ -1,0 +1,30 @@
+=========================
+Grafo com v:10 e k:2
+Indice inicial do vértice:7, Indice final do vértice :0
+Vértice Inicial:(3, 10), Vértice Final :(3, 0)
+=========================
+Resultado da busca: Busca Profunda
+Caminho percorrido: [(3, 10), (5, 7), (1, 8), (1, 4), (2, 10), (3, 0)]
+Tamanho do caminho percorrido: 6
+Tempo de execução do algoritmo Busca por Profundidade: 0:00:00.000057
+=========================
+Resultado da busca: Busca por Largura
+Caminho percorrido: [(3, 10), (5, 7), (1, 6), (1, 8), (1, 4), (2, 10), (3, 0)]
+Tamanho do caminho percorrido: 7
+Tempo de execução do algoritmo Busca por Largura: 0:00:00.000037
+=========================
+Resultado da busca: Best First
+Caminho percorrido: [(3, 10), (5, 7), (1, 8), (1, 4), (1, 6), (2, 10), (3, 0)]
+Tamanho do caminho percorrido: 7
+Tempo de execução do algoritmo Busca Best First: 0:00:00.000035
+=========================
+Resultado da busca: A*
+Caminho percorrido: [(3, 10), (1, 6), (5, 7), (1, 4), (1, 8), (2, 10), (3, 0)]
+Tamanho do caminho percorrido: 7
+Tempo de execução do algoritmo Busca A*: 0:00:00.000048
+=========================
+Resultado da busca: A
+Caminho percorrido: [(3, 10), (1, 6), (5, 7), (1, 4), (1, 8), (2, 10), (3, 0)]
+Tamanho do caminho percorrido: 7
+Tempo de execução do algoritmo Busca A: 0:00:00.000124
+=========================
